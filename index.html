@@ -6,21 +6,29 @@
     <link rel="stylesheet" href="./style/style.css" />
     <title>Meu Projeto</title>
     <script>
-      function validateForm() {
-        var username = document.getElementById("nome").value;
-        var password = document.getElementById("password").value;
+      async function validateForm(event) {
+        event.preventDefault(); // Evita o envio padrão do formulário
 
-        if (username !== "Felipe") {
+        const username = document.getElementById("nome").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch(`${process.env.URL}/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Login Efetuado com Sucesso!");
+          // Redirecionar ou fazer outra ação aqui
+        } else {
           alert("Nome de usuário ou senha inválidos!");
-          return false;
-
-          if (password !== "Louzeiro@123")
-            alert("Nome de usuário ou senha inválidos!");
-          else alert("Login Efetuado com Sucesso!");
         }
-
-
-        return true;
+      }
     </script>
   </head>
   <body class="body">
@@ -30,7 +38,7 @@
         <img src="assets/img/svg/login.svg" alt="Imagem da tela de login" />
       </div>
       <div class="formdiv">
-        <form class="formulario" onsubmit="return validateForm()">
+        <form class="formulario" onsubmit="validateForm(event)">
           <label for="nome"><strong>Email</strong></label> <br />
           <input
             type="email"
@@ -77,9 +85,9 @@
           </button>
           <br />
         </form>
-        <a href="recoverypassword.html"
-          ><button class="rememberpassword">Esqueci a senha</button></a
-        >
+        <a href="recoverypassword.html">
+          <button class="rememberpassword">Esqueci a senha</button>
+        </a>
       </div>
     </div>
   </body>
